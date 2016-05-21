@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package com.android.purenexussettings;
+package com.android.purenexusutils;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,20 +34,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.purenexussettings.utils.AppPickerAdapter;
+import com.android.purenexusutils.utils.AppPickerAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AppPickerAppFragment extends Fragment {
+public class AppPickerShortFragment extends Fragment {
 
     private class LoadList extends AsyncTask<Void, Void, Void> {
         private ProgressDialog dialog = null;
         private Activity context = null;
         private RecyclerView mList = null;
         private PackageManager packageManager;
-        private ArrayList<ApplicationInfo> packageList;
+        private ArrayList<ResolveInfo> shortcutList = new ArrayList<ResolveInfo>();
+        private ArrayList<Intent> intentList = new ArrayList<Intent>();
 
         public LoadList setInits(Activity context, RecyclerView list, PackageManager pmanager) {
             this.context = context;
@@ -73,16 +76,18 @@ public class AppPickerAppFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             // this loads up the listview - can take a sec
-            List<ApplicationInfo> apps = packageManager.getInstalledApplications(0);
-            packageList = new ArrayList<ApplicationInfo>();
-            for (ApplicationInfo info : apps) {
-                //basically only loads up things visible to launcher
-                if (packageManager.getLaunchIntentForPackage(info.packageName) != null) {
-                    packageList.add(info);
-                }
-            }
+
+            List<ResolveInfo> shorts = packageManager.queryIntentActivities(new Intent(Intent.ACTION_CREATE_SHORTCUT),0);
             //alphabetizes list
-            Collections.sort(packageList, new ApplicationInfo.DisplayNameComparator(packageManager));
+            Collections.sort(shorts, new ResolveInfo.DisplayNameComparator(packageManager));
+
+            for (ResolveInfo info : shorts) {
+                shortcutList.add(info);
+                // creates intent list with shortcut creating intents
+                Intent shortintent = new Intent(Intent.ACTION_CREATE_SHORTCUT);
+                shortintent.setComponent(new ComponentName(info.activityInfo.applicationInfo.packageName, info.activityInfo.name));
+                intentList.add(shortintent);
+            }
 
             return null;
         }
@@ -93,7 +98,7 @@ public class AppPickerAppFragment extends Fragment {
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             mList.setLayoutManager(llm);
 
-            mList.setAdapter(new AppPickerAdapter(context, packageManager, packageList, null, null, 0, 0));
+            mList.setAdapter(new AppPickerAdapter(context, packageManager, null, shortcutList, intentList, 0, 0));
 
             ((TinkerActivity) context).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
             dialog.dismiss();
@@ -113,5 +118,5 @@ public class AppPickerAppFragment extends Fragment {
         (new LoadList()).setInits(getActivity(), listView, getActivity().getPackageManager()).execute();
     }
 
-    public AppPickerAppFragment() {}
+    public AppPickerShortFragment() {}
 }

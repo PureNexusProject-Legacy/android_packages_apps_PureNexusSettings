@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.android.purenexussettings.preferences;
+package com.android.purenexusutils.preferences;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,7 +26,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
-import com.android.purenexussettings.R;
+import com.android.purenexusutils.R;
 
 
 public class AlphaPatternDrawable extends Drawable {

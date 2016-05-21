@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.purenexussettings;
+package com.android.purenexusutils;
 
 import android.os.Bundle;
 import android.preference.Preference;
@@ -22,15 +22,15 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
 
-public class DisplayFragment extends PreferenceFragment {
-    public DisplayFragment(){}
+public class NavbarFragment extends PreferenceFragment {
+    public NavbarFragment(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Load the preferences from an XML resource
-        addPreferencesFromResource(R.xml.display_fragment);
+        addPreferencesFromResource(R.xml.navbar_fragment);
     }
 
     @Override

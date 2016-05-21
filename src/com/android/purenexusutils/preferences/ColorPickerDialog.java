@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.android.purenexussettings.preferences;
+package com.android.purenexusutils.preferences;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -34,9 +34,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.purenexussettings.R;
-import com.android.purenexussettings.TinkerActivity;
-import com.android.purenexussettings.preferences.ColorPickerView.OnColorChangedListener;
+import com.android.purenexusutils.R;
+import com.android.purenexusutils.TinkerActivity;
+import com.android.purenexusutils.preferences.ColorPickerView.OnColorChangedListener;
 
 import java.util.Locale;
 

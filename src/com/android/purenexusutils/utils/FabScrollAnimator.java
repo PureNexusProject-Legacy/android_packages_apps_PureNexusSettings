@@ -15,7 +15,7 @@
  */
 
 
-package com.android.purenexussettings.utils;
+package com.android.purenexusutils.utils;
 
 import android.content.Context;
 import android.os.Handler;
