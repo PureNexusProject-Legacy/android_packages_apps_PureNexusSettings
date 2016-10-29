@@ -41,7 +41,7 @@
         <item>EditPropFragment</item>
         <item>AboutFragment</item>
         <item>BuildPropFragment</item>
-        <item>FiSwitchFragment</item>
+        <item>LaunchFiSwitch</item>
         <item>DeviceFragment</item>
     </string-array>
 

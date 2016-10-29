@@ -111,20 +111,6 @@
 
   <!-- FiSwitch Frag strings -->
     <string name="fiswitch_frag_title">Fi Switch</string>
-    <string name="dial1">Sprint</string>
-    <string name="dial1_sum">Force jump to Sprint</string>
-    <string name="dial2">T-Mobile</string>
-    <string name="dial2_sum">Force jump to T-Mobile</string>
-    <string name="dial7">US Cellular</string>
-    <string name="dial7_sum">Force jump to US Cellular</string>
-    <string name="dial3">Next carrier</string>
-    <string name="dial3_sum">Force jump to next carrier</string>
-    <string name="dial4">Auto-switch</string>
-    <string name="dial4_sum">(Re)Enable auto switching</string>
-    <string name="dial5">Repair</string>
-    <string name="dial5_sum">Resets everything</string>
-    <string name="dial6">Info</string>
-    <string name="dial6_sum">Current network info</string>
 
   <!-- Navdrawer categories -->
     <string name="util_cat_title">Utilities</string>

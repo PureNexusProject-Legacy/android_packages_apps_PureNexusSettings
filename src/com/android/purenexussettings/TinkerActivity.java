@@ -76,7 +76,10 @@ public class TinkerActivity extends AppCompatActivity {
     // stuff for widget calls to open fragments
     public static final String EXTRA_START_FRAGMENT = "com.android.purenexussettings.tinkerings.EXTRA_START_FRAGMENT";
 
+    // some package things
     public static final String PROJFI_PACKAGE_NAME = "com.google.android.apps.tycho";
+    public static final String FISWITCH_PACKAGE = "com.cheekydevs.fiswitch";
+    public static final String FISWITCH_CLASS = "com.cheekydevs.fiswitch.CheekyActivity";
 
     // example - used to retain slidetab position
     public static int LAST_SLIDE_BAR_TAB;
@@ -91,11 +94,11 @@ public class TinkerActivity extends AppCompatActivity {
     // for backstack tracking
     private Stack<String> fragmentStack;
 
-    // various bools for this or that
+    // various bools/ints for this or that
     private boolean mBackPress;
     private boolean mIgnoreBack;
     private boolean mFromClick;
-    private boolean mIgnore;
+    private int mIgnore;
     private boolean mMenu;
     private boolean fullyClosed;
     private boolean openingHalf;
@@ -248,21 +251,20 @@ public class TinkerActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 // check for external app launching navdrawer items
-                // ...nothing here currently...
-
-                // if nothing was caught in the above, do the usual prep to show frag stuff
-                if (!mIgnore) {
-                    if (mItemPosition != item.getItemId()) {
-                        mItemPosition = item.getItemId();
-                        mFromClick = true;
-                        setTitle(navMenuTitles[mItemPosition]);
-                        removeCurrent();
-                    } else {
-                        mIgnore = true;
-                    }
-                    mDrawerLayout.closeDrawer(mNavView);
+                if (item.getTitle().toString().equals(getResources().getString(R.string.fiswitch_frag_title))) {
+                    mIgnore = 2;
+                } else if (mItemPosition == item.getItemId()) {
+                    // clicked already active item
+                    mIgnore = 1;
+                } else {
+                    mItemPosition = item.getItemId();
+                    mFromClick = true;
+                    setTitle(navMenuTitles[mItemPosition]);
+                    removeCurrent();
+                    mIgnore = 0; 
                 }
 
+                mDrawerLayout.closeDrawer(mNavView);
                 return true;
             }
         });
@@ -289,9 +291,12 @@ public class TinkerActivity extends AppCompatActivity {
                 openingHalf = true;
                 invalidateOptionsMenu();
                 // now that the drawer animation is done - load fragment
-                if (mIgnore || !mFromClick ) {
-                    mIgnore = false;
-                } else {
+                if (mIgnore == 2) {
+                    mIgnore = 0;
+                    launchFiSwitch();
+                } else if (mIgnore == 1) {
+                    mIgnore = 0;
+                } else if (mFromClick) {
                     displayView(mItemPosition);
                 }
             }
@@ -502,6 +507,15 @@ public class TinkerActivity extends AppCompatActivity {
 
     public static boolean checkIntent(Context context, Intent intent) {
         return context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
+    }
+
+    private void launchFiSwitch() {
+        Intent link = new Intent(Intent.ACTION_MAIN);
+        ComponentName cn = new ComponentName(FISWITCH_PACKAGE, FISWITCH_CLASS);
+        link.setComponent(cn);
+        if (checkIntent(this, link)) {
+            startActivity(link);
+        } // add snackbar error message here?
     }
 
     @Override
